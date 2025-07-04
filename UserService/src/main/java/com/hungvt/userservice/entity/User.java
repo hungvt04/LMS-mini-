@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.minidev.json.annotate.JsonIgnore;
 
 @Getter
 @Setter
@@ -23,6 +24,7 @@ public class User extends PrimaryEntity {
 
     private String username;
 
+    @JsonIgnore
     private String password;
 
     private String email;

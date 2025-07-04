@@ -25,4 +25,6 @@ public class Role extends PrimaryEntity {
 
     private String description;
 
+    private int roleRank;
+
 }

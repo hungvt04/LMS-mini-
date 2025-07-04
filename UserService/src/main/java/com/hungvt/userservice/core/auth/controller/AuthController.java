@@ -4,6 +4,7 @@ import com.hungvt.userservice.core.auth.model.request.AuthChangePasswordRequest;
 import com.hungvt.userservice.core.auth.model.request.AuthLoginRequest;
 import com.hungvt.userservice.core.auth.service.AuthService;
 import com.hungvt.userservice.infrastructure.constant.MappingUrl;
+import com.hungvt.userservice.infrastructure.utils.Helper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -24,27 +25,27 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthLoginRequest request) {
-        return ResponseEntity.ok(authService.login(request));
+        return Helper.createResponseEntity(authService.login(request));
     }
 
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshToken(@CookieValue("refresh_token") String refreshToken) {
-        return ResponseEntity.ok(authService.refreshToken(refreshToken));
+        return Helper.createResponseEntity(authService.refreshToken(refreshToken));
     }
 
     @PostMapping("/logout")
     public ResponseEntity<?> login() {
-        return ResponseEntity.ok(authService.logout());
+        return Helper.createResponseEntity(authService.logout());
     }
 
     @GetMapping("/profile")
     public ResponseEntity<?> getProfile() {
-        return ResponseEntity.ok(authService.getProfile());
+        return Helper.createResponseEntity(authService.getProfile());
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<?> login(@RequestBody AuthChangePasswordRequest request) {
-        return ResponseEntity.ok(authService.changePassword(request));
+    public ResponseEntity<?> changePassword(@RequestBody AuthChangePasswordRequest request) {
+        return Helper.createResponseEntity(authService.changePassword(request));
     }
 
 }
