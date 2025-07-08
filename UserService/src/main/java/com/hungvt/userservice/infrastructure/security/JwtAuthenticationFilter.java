@@ -73,6 +73,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
             CustomerUserDetail userDetails = userDetailsService.loadUserByUsername(username);
 
+            if (userDetails.getAuthorities().isEmpty()) {
+                userDetails.setPermissions(List.of("ROLE_USER"));
+            }
+
             UsernamePasswordAuthenticationToken authToken =
                     new UsernamePasswordAuthenticationToken(
                             userDetails,
@@ -80,6 +84,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             userDetails.getAuthorities());
 
             SecurityContextHolder.getContext().setAuthentication(authToken);
+            log.info("User authenticated: {}", userDetails.getUsername());
+            log.info("User roles: {}", userDetails.getAuthorities());
+            log.info("Is authenticated: {}", SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
+            
         }
         filterChain.doFilter(request, response);
 

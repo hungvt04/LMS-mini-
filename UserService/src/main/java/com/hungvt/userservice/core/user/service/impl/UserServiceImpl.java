@@ -1,8 +1,8 @@
 package com.hungvt.userservice.core.user.service.impl;
 
-import com.hungvt.userservice.core.user.repository.UserRoleRepository;
-import com.hungvt.userservice.core.user.repository.UserUserRepository;
-import com.hungvt.userservice.core.user.repository.UserUserRoleRepository;
+import com.hungvt.userservice.core.user.repository.URoleRepository;
+import com.hungvt.userservice.core.user.repository.UUserRepository;
+import com.hungvt.userservice.core.user.repository.UUserRoleRepository;
 import com.hungvt.userservice.core.user.service.UserService;
 import com.hungvt.userservice.infrastructure.common.model.response.ResponseObject;
 import com.hungvt.userservice.infrastructure.utils.JwtUtils;
@@ -17,11 +17,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserUserRepository userUserRepository;
+    private final UUserRepository uUserRepository;
 
-    private final UserUserRoleRepository userUserRoleRepository;
+    private final UUserRoleRepository uUserRoleRepository;
 
-    private final UserRoleRepository userRoleRepository;
+    private final URoleRepository uRoleRepository;
 
     private final JwtUtils jwtUtils;
 
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 //        }
 //        User user = userOptional.get();
 
-        List<Integer> roleRanks = userRoleRepository.findByUserId(id);
+        List<Integer> roleRanks = uRoleRepository.findByUserId(id);
         if (roleRanks.isEmpty()) {
             // Cấp thấp nhất
             return ResponseObject.ofData(null,

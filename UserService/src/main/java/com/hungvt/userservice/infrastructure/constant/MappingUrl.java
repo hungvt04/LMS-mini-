@@ -18,4 +18,6 @@ public class MappingUrl {
 
     public static final String API_AUTH = API_VERSION_USER_SERVICE + "/auth";
 
+    public static final String API_URL_EXCEPTION = API_VERSION + "/exeptions";
+
 }

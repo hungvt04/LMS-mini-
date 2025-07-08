@@ -64,6 +64,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(MappingUrl.API_AUTH + "/**").permitAll()
                         .requestMatchers("/oauth2/**", "/ws/**", "/sockjs-node/**").permitAll()
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/api/endpoints",
+                                "/v3/api-docs/**").permitAll()
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

@@ -2,6 +2,7 @@ package com.hungvt.userservice.core.auth.service.impl;
 
 import com.hungvt.userservice.core.auth.model.request.AuthChangePasswordRequest;
 import com.hungvt.userservice.core.auth.model.request.AuthLoginRequest;
+import com.hungvt.userservice.core.auth.model.request.AuthRefreshTokenRequest;
 import com.hungvt.userservice.core.auth.model.request.AuthRegisterRequest;
 import com.hungvt.userservice.core.auth.model.response.AuthProfileResponse;
 import com.hungvt.userservice.core.auth.repository.AuthTokenRepository;
@@ -10,16 +11,19 @@ import com.hungvt.userservice.core.auth.service.AuthService;
 import com.hungvt.userservice.entity.Token;
 import com.hungvt.userservice.entity.User;
 import com.hungvt.userservice.infrastructure.common.model.response.ResponseObject;
+import com.hungvt.userservice.infrastructure.constant.MappingUrl;
 import com.hungvt.userservice.infrastructure.security.custom.CustomerUserDetail;
 import com.hungvt.userservice.infrastructure.security.custom.CustomerUserDetailService;
 import com.hungvt.userservice.infrastructure.utils.JwtUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -56,7 +61,7 @@ public class AuthServiceImpl implements AuthService {
         ResponseCookie cookie = ResponseCookie.from("refresh_token", refreshToken)
                 .httpOnly(true)
                 .secure(false)
-                .path("/auth/refresh")
+                .path(MappingUrl.API_AUTH + "/refresh")
                 .maxAge(Duration.ofHours(refreshToken.isEmpty() ? 0 : 4))
                 .sameSite("Strict")
                 .build();
@@ -109,11 +114,13 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public ResponseObject refreshToken(String refreshToken) {
+    public ResponseObject refreshToken(String refreshToken, AuthRefreshTokenRequest request) {
 
-        String accessToken = jwtUtils.getTokenFromRequest(servletRequest);
+        log.info("Refreshing token with refresh token: {}", refreshToken);
+        log.info("Access token: {}", request.getAccessToken());
+
         List<Token> tokens = authTokenRepository.findByAccessTokenAndRefreshTokenAndIsDeleted(
-                accessToken, refreshToken, false
+                request.getAccessToken(), refreshToken, false
         );
         if (tokens.isEmpty()) {
             throw new RuntimeException("Không tìm thấy token hợp lệ.");
@@ -176,19 +183,18 @@ public class AuthServiceImpl implements AuthService {
                     HttpStatus.CONFLICT);
         }
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getUsername(), request.getOldPassword())
-        );
-        if (authentication != null && authentication.isAuthenticated()) {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), request.getOldPassword())
+            );
 
             user.setPassword(passwordEncoder.encode(request.getNewPassword()));
             authUserRepository.save(user);
             return ResponseObject.ofData(null,
-                    "Đổi mật khẩu thành công.",
-                    HttpStatus.NO_CONTENT);
-        } else {
+                    "Đổi mật khẩu thành công.");
+        } catch (BadCredentialsException e) {
             return ResponseObject.ofData(null,
-                    "Mật khẩu cũ không đúng.",
+                    "Lỗi khi xác thực mật khẩu cũ.",
                     HttpStatus.UNAUTHORIZED);
         }
     }

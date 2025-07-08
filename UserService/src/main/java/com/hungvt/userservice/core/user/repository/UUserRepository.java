@@ -8,12 +8,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserUserRepository extends UserRepository {
+public interface UUserRepository extends UserRepository {
 
     @Query(value = """
             SELECT
-                u.*
-            FROM User JOIN UserRole ur
+                u
+            FROM User u JOIN UserRole ur
                 ON u.id = ur.user.id
             WHERE ur.role.roleRank < :roleRank
             """)

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserRoleRepository extends RoleRepository {
+public interface URoleRepository extends RoleRepository {
 
     @Query("""
             SELECT
