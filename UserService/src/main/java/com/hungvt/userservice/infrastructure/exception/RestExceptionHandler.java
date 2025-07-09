@@ -146,14 +146,14 @@ public class RestExceptionHandler {
 
         String message = getMessage("RuntimeException.message");
         String detailMessage = exception.getLocalizedMessage();
-        int code = 500;
+        int code = 409;
         String moreInformation = MappingUrl.API_URL_EXCEPTION + "/" + code;
 
         ErrorResponse response = new ErrorResponse(message, detailMessage, null, code, moreInformation);
         ResponseObject responseObject = ResponseObject.ofData(
                 response,
                 detailMessage,
-                HttpStatus.INTERNAL_SERVER_ERROR);
+                HttpStatus.CONFLICT);
         return Helper.createResponseEntity(responseObject);
     }
 
@@ -178,6 +178,7 @@ public class RestExceptionHandler {
 
         String message = getMessage("Exception.message");
         String detailMessage = exception.getLocalizedMessage();
+        log.error("❌ Exception: {}", detailMessage, exception);
         int code = 500;
         String moreInformation = MappingUrl.API_URL_EXCEPTION + "/" + code;
 
