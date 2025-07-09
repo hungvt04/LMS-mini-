@@ -4,6 +4,7 @@ import com.hungvt.userservice.core.user.repository.URoleRepository;
 import com.hungvt.userservice.core.user.repository.UUserRepository;
 import com.hungvt.userservice.core.user.repository.UUserRoleRepository;
 import com.hungvt.userservice.core.user.service.UserService;
+import com.hungvt.userservice.entity.User;
 import com.hungvt.userservice.infrastructure.common.model.response.ResponseObject;
 import com.hungvt.userservice.infrastructure.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +54,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseObject getUser(String id) {
-        return null;
+        Optional<User> userOptional = uUserRepository.findById(id);
+        if (userOptional.isEmpty()) {
+            return ResponseObject.ofData(null,
+                    "Không tìm thấy người dùng: " + id,
+                    HttpStatus.NOT_FOUND);
+        }
+        User user = userOptional.get();
+        return ResponseObject.ofData(user);
     }
 
 }

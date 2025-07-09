@@ -5,7 +5,7 @@ app:
 #    userService: /api/v1/user-service
 spring:
   application:
-    name: ApiGateway
+    name: api-gateway
   cloud:
     gateway:
       defaultFilters:
@@ -29,6 +29,8 @@ spring:
           filters:
             #- StripPrefix=2 # phía user-service do phía user-service không có tiền tố /api/v1 => StripPrefix=2
             - RewritePath=/api/v1/users/(?<segment>.*), /user-service/$\{segment} # Thay đổi đường dẫn để phù hợp với user-service.
-
-
-
+# Eureka
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
