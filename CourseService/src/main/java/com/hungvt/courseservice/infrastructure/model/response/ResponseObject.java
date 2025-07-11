@@ -13,24 +13,24 @@ import org.springframework.http.HttpStatus;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ResponseObject {
+public class ResponseObject<T> {
 
-    private Object data;
+    private T data;
 
     private String message;
 
     private HttpStatus status;
 
-    public static <T> ResponseObject ofData(T data) {
-        return new ResponseObject(data, null, HttpStatus.OK);
+    public static <T> ResponseObject<T> ofData(T data) {
+        return new ResponseObject<>(data, null, HttpStatus.OK);
     }
 
-    public static <T> ResponseObject ofData(T data, String message) {
-        return new ResponseObject(data, message, HttpStatus.OK);
+    public static <T> ResponseObject<T> ofData(T data, String message) {
+        return new ResponseObject<T>(data, message, HttpStatus.OK);
     }
 
-    public static <T> ResponseObject ofData(T data, String message, HttpStatus status) {
-        return new ResponseObject(data, message, status);
+    public static <T> ResponseObject<T> ofData(T data, String message, HttpStatus status) {
+        return new ResponseObject<T>(data, message, status);
     }
 
 }

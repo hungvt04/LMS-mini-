@@ -18,6 +18,8 @@ import lombok.Setter;
 @Table(name = "category")
 public class Category extends PrimaryEntity {
 
+    private String categoryCode;
+
     private String categoryName;
 
     private String description;

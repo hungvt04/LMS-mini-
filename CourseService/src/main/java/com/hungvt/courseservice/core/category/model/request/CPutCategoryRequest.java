@@ -11,6 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CPutCategoryRequest {
 
+    private String categoryCode;
+
     private String categoryName;
 
     private String description;

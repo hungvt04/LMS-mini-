@@ -15,6 +15,6 @@ public interface CategoryService {
 
     ResponseObject getCategory(String id);
 
-    ResponseObject searchCategories(CGetSearchCategoriesRequest request);
+    ResponseObject getSearchCategories(CGetSearchCategoriesRequest request);
 
 }
