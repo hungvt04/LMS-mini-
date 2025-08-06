@@ -21,10 +21,10 @@ public class MergeUtils {
         response.setTeacherId(courseResponse.getTeacherId());
 
         List<CUserResponse> usersFilter = users.stream()
-                .filter(user -> user.getUserId().equalsIgnoreCase(courseResponse.getTeacherId()))
+                .filter(user -> user.getId().equalsIgnoreCase(courseResponse.getTeacherId()))
                 .toList();
         if (!usersFilter.isEmpty()) {
-            response.setTeacherName(usersFilter.get(0).getUserName());
+            response.setTeacherName(usersFilter.get(0).getUsername());
         }
         return response;
     }

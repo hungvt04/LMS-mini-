@@ -1,9 +1,22 @@
 package com.hungvt.courseservice.core.client.model.response;
 
-public interface CUserResponse {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-    String getUserId();
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class CUserResponse {
 
-    String getUserName();
+//    String getUserId();
+//
+//    String getUserName();
+
+    private String id;
+
+    private String username;
 
 }

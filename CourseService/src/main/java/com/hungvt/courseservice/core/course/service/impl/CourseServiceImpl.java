@@ -16,6 +16,7 @@ import com.hungvt.courseservice.infrastructure.model.response.ResponseObject;
 import com.hungvt.courseservice.infrastructure.utils.Helper;
 import com.hungvt.courseservice.infrastructure.utils.MergeUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CourseServiceImpl implements CourseService {
@@ -44,8 +46,12 @@ public class CourseServiceImpl implements CourseService {
         }
 
         ResponseObject<?> responseObject = userClient.getUser(request.getTeacherId());
-        Optional<Object> userOptional = Optional.ofNullable(responseObject.getData());
-        if (userOptional.isEmpty()) {
+        CUserResponse userOptional = (CUserResponse) responseObject.getData();
+
+        log.info("userOptional: {}", userOptional.getId());
+        log.info("userOptional: {}", userOptional.getUsername());
+
+        if (userOptional.getId() == null || userOptional.getId().isBlank()) {
             return ResponseObject.ofData(null,
                     "Không tìm thấy giáo viên với ID: " + request.getTeacherId(),
                     HttpStatus.NOT_FOUND);
@@ -138,4 +144,18 @@ public class CourseServiceImpl implements CourseService {
         return ResponseObject.ofData(response, "Lấy danh sách thành công.");
     }
 
+    @Override
+    public ResponseObject<?> getUser(String id) {
+
+        ResponseObject<?> responseObject = userClient.getUser(id);
+        CUserResponse userOptional = (CUserResponse) responseObject.getData();
+
+        if (userOptional.getUsername() == null || userOptional.getUsername().isBlank()) {
+            return ResponseObject.ofData(null,
+                    "Không tìm thấy giáo viên với ID: " + id,
+                    HttpStatus.NOT_FOUND);
+        }
+
+        return responseObject;
+    }
 }

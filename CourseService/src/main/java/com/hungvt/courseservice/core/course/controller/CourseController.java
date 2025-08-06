@@ -49,4 +49,9 @@ public class CourseController {
         return Helper.createResponseEntity(courseService.getSearchCourses(request));
     }
 
+    @GetMapping("/users/{id}")
+    public ResponseEntity<?> getUser(@PathVariable String id) {
+        return Helper.createResponseEntity(courseService.getUser(id));
+    }
+
 }

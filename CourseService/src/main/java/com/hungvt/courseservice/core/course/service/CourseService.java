@@ -17,4 +17,6 @@ public interface CourseService {
 
     ResponseObject<?> getSearchCourses(COGetSearchCourseRequest request);
 
+    ResponseObject<?> getUser(String id);
+
 }

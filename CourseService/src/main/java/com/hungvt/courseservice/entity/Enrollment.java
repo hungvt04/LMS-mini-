@@ -2,7 +2,6 @@ package com.hungvt.courseservice.entity;
 
 import com.hungvt.courseservice.entity.base.PrimaryEntity;
 import com.hungvt.courseservice.infrastructure.constant.EnrollmentStatus;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

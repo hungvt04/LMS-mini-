@@ -11,7 +11,7 @@ import java.util.List;
 @FeignClient(name = "user-service")
 public interface UserClient {
 
-    @GetMapping("/{id}")
+    @GetMapping("/api/v1/user-service/users/{id}")
     ResponseObject<CUserResponse> getUser(@PathVariable String id);
 
     @GetMapping
